@@ -37,7 +37,7 @@ router.beforeEach((to, from, next) => {
   const isLoggedIn = isUserLoggedIn();
   const hasAccess = true;
 
-  console.log('Navigating to:', to.name, 'Has Access:', hasAccess, 'Is Logged In:', isLoggedIn);
+  //console.log('Navigating to:', to.name, 'Has Access:', hasAccess, 'Is Logged In:', isLoggedIn);
 
   if (to.name === 'login' && isLoggedIn) {
     next({ name: 'dashboards-crm' });
@@ -50,7 +50,7 @@ router.beforeEach((to, from, next) => {
   }
 
   if (isLoggedIn && !hasAccess) {
-    console.warn('Access Denied:', to.name);
+   // console.warn('Access Denied:', to.name);
     next({ name: 'not-authorized' });
     return;
   }

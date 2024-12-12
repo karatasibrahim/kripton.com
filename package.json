@@ -1,5 +1,5 @@
 {
-  "name": "otelmate",
+  "name": "kriptonai",
   "version": "8.0.0",
   "private": true,
   "scripts": {
@@ -81,7 +81,7 @@
   "resolutions": {
     "postcss": "8"
   },
-  "description": "OtelMate Otel Yönetim Yazılımı Projesi 01-04-2024 Tarihinde v2.0 Başlanıldı.",
+  "description": "KriptonAi Projesi 01-04-2024 Tarihinde v2.0 Başlanıldı.",
   "main": "themeConfig.js",
   "author": "ibrahim karatas",
   "license": "ISC"

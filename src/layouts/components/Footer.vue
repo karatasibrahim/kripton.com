@@ -14,7 +14,7 @@
         rel="noopener noreferrer"
         class="text-primary ms-1"
       >  &copy;
-      {{ new Date().getFullYear() }} | OtelMate </a>
+      {{ new Date().getFullYear() }} | KriptonAi </a>
     </span>
   </div>
 </template>

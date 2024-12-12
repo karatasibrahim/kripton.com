@@ -1,6 +1,6 @@
 # vue
 
- OtelMate Otel Yönetim Yazılımı Projesi 01-04-2024 Tarihinde v2.0 Başlanıldı.
+ KriptonAi Projesi 12-12-2024 Tarihinde v2.0 Başlanıldı.
 
 ## Project Setup
 

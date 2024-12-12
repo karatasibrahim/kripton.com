@@ -133,7 +133,7 @@ const handleLogin = async () => {
 
       console.log(userData)
       const token = await userCredential.user.getIdToken()
-      console.log(token)
+    //  console.log(token)
       localStorage.setItem('accessToken', token)
       localStorage.setItem('userData', JSON.stringify(userInfo))
       localStorage.setItem('userAbilities', JSON.stringify(userAbilities));
@@ -190,7 +190,7 @@ const onSubmit = () => {
           />
 
           <h5 class="text-h5 mb-1">
-             <span class="text-capitalize"> OtelMate </span>Giriş Paneli 👋🏻
+             <span class="text-capitalize"> KriptonAi </span>Giriş Paneli 👋🏻
           </h5>
          
         </VCardText>
