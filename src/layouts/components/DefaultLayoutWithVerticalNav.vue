@@ -56,16 +56,16 @@ watch(isDialogVisible, value => {
         <VSpacer />
         
         <VCol cols="2">
-      <AppSelect
+      <!-- <AppSelect
         v-model="selectedOption1"
         :items="states"  
         single-line
         variant="filled"
-      />
+      /> -->
      
       
     </VCol>
-    <VBtn
+    <!-- <VBtn
       size="38"
       color="primary"
     >
@@ -75,7 +75,7 @@ watch(isDialogVisible, value => {
         :disabled="isDialogVisible"
         @click="isDialogVisible = true"
       />
-    </VBtn>
+    </VBtn> -->
     <!-- <VBtn
     :disabled="isDialogVisible"
     @click="isDialogVisible = true"

@@ -44,16 +44,7 @@ const userProfileList = [
       params: { tab: 'account' },
     },
   },
-  {
-    type: 'navItem',
-    icon: 'tabler-credit-card',
-    title: 'KBS Servisi',
-    to: {
-      name: 'pages-account-settings-tab',
-      params: { tab: 'billing-plans' },
-    },
-    
-  },
+   
   { type: 'divider' },
   {
     type: 'navItem',

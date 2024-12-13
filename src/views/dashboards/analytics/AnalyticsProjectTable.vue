@@ -1,78 +1,83 @@
 <script setup>
 import { VDataTable } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@/@fake-db/utils'
-import { useProjectStore } from '@/views/dashboards/analytics/useProjectStore'
-import { avatarText } from '@core/utils/formatters'
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
 
-const projectStore = useProjectStore()
 const searchQuery = ref('')
 
 const options = ref({
   page: 1,
-  itemsPerPage: 10,
-  sortBy: [],
+  itemsPerPage: 25, 
+  sortBy: [{ key: 'name', order: 'asc' }],
   groupBy: [],
   search: undefined,
 })
 
 const projects = ref([])
 
-// 👉 headers
+// Tablo başlıkları
 const headers = [
-  {
-    title: 'Name',
-    key: 'name',
-  },
-  {
-    title: 'Leader',
-    key: 'leader',
-  },
-  {
-    title: 'Team',
-    key: 'team',
-  },
-  {
-    title: 'Status',
-    key: 'status',
-  },
-  {
-    title: 'Actions',
-    key: 'actions',
-    sortable: false,
-  },
+{ title: 'Icon', key: 'icon', sortable: false },
+  { title: 'Coin Name', key: 'name' },
+  { title: 'Symbol', key: 'symbol' },
+  { title: 'Price (USD)', key: 'price' },
+  { title: 'Circulating Supply', key: 'supply' },
+  { title: 'Last Update', key: 'lastUpdate' },
+  { title: 'Comment', key: 'comment', sortable: false },
 ]
 
-// 👉 Fetch Projects
-onMounted(() => {
-  projectStore.fetchProjects().then(response => {
-    projects.value = response.data
-  }).catch(error => {
-    console.log(error)
-  })
-})
+// API'den veri çekme
+async function fetchCryptoPrices() {
+  const apiKey = '9a9d74af-1316-4aff-80a4-e0d645aa1b29'
+  const symbols = [
+    'BTC', 'ETH', 'XRP', 'SOL', 'BNB', 'DOGE', 'ADA', 'TRX', 'AVAX', 'SHIB', 'XLM', 
+    'DOT', 'HBAR', 'SUI', 'UNI', 'LTC', 'NEAR', 'APT', 'ICP', 'CRO', 'RENDER', 'ARB',
+    'ALGO', 'STX', 'FTM', 'TIA', 'INJ', 'FLOKI', 'THETA', 'SEI', 'WLD', 'RUNE', 
+    'SAND', 'QNT', 'FLR', 'FLOW', 'DYDX', 'ENS', 'MANA', 'MATIC', 'APE', 'GT', 
+    'MINA', 'ZK', 'AMP', 'ROSE', 'ZRO', '1INCH', 'KSM', 'DASH', 'BOME'
+  ]
+  const apiUrl = `https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=${symbols.join(',')}`
+  
+  try {
+    const response = await axios.get(apiUrl, {
+      headers: {
+        'X-CMC_PRO_API_KEY': apiKey,
+        Accept: 'application/json',
+      },
+    })
+
+    const data = response.data.data
+
+    projects.value = Object.values(data).map(coin => ({
+      icon: `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`, // İkon URL
+      
+      name: coin.name,
+      symbol: coin.symbol,
+      price: coin.quote.USD.price.toFixed(2),
+      supply: coin.circulating_supply.toLocaleString(),
+      lastUpdate: new Date(coin.last_updated).toLocaleString(),
+      comment: '',
+    })) .sort((a, b) => a.name.localeCompare(b.name))
+  } catch (error) {
+    console.error('API Fetch Error:', error)
+  }
+}
+
+onMounted(fetchCryptoPrices)
 </script>
-
 <template>
-  <VCard v-if="projects">
+  <VCard v-if="projects.length">
     <VCardItem class="project-header d-flex flex-wrap justify-space-between py-4 gap-4">
-      <VCardTitle>Projects</VCardTitle>
-
-      <template #append>
-        <div style="inline-size: 272px;">
-          <AppTextField
-            v-model="searchQuery"
-            placeholder="Search"
-          />
-        </div>
-      </template>
+      <VCardTitle>Cryptocurrency Prices</VCardTitle>
     </VCardItem>
 
     <VDivider />
 
-    <!-- SECTION Table -->
+    <!-- Tablo -->
     <VDataTable
       v-model:page="options.page"
-      :items-per-page="5"
+      :items-per-page="10"
       show-select
       :search="searchQuery"
       :headers="headers"
@@ -80,111 +85,39 @@ onMounted(() => {
       class="text-no-wrap"
       @update:options="options = $event"
     >
-      <!-- 👉 Name -->
-      <template #item.name="{ item }">
-        <div class="d-flex align-center gap-3 py-2">
-          <VAvatar
-            :variant="!item.raw.logo.length ? 'tonal' : undefined"
-            :color="!item.raw.logo.length ? 'primary' : undefined"
-            size="38"
-          >
-            <VImg
-              v-if="item.raw.logo.length"
-              :src="item.raw.logo"
-            />
-            <span
-              v-else
-              class="font-weight-medium"
-            >{{ avatarText(item.raw.name) }}</span>
-          </VAvatar>
-
-          <div>
-            <p class="font-weight-medium mb-0">
-              {{ item.raw.name }}
-            </p>
-            <span class="text-disabled text-sm">{{ item.raw.date }}</span>
-          </div>
-        </div>
+      <!-- İkon sütunu -->
+      <template #item.icon="{ item }">
+        <VAvatar
+          :src="item.icon"
+          size="38"
+          alt="Icon"
+        />
       </template>
 
-      <!-- 👉 team -->
-      <template #item.team="{ item }">
-        <div class="v-avatar-group">
-          <VAvatar
-            v-for="(avatar, index) in item.raw.team"
-            :key="index"
-            :size="30"
-            :image="avatar"
-          />
-        </div>
-      </template>
-
-      <!-- 👉 Status -->
-      <template #item.status="{ item }">
-        <div
-          class="d-flex align-center gap-3"
-          style="min-inline-size: 150px;"
-        >
-          <div class="flex-grow-1">
-            <VProgressLinear
-              :model-value="item.raw.status"
-              color="primary"
-              height="8"
-              rounded
-              rounded-bar
-            />
-          </div>
-          <span>{{ item.raw.status }}%</span>
-        </div>
-      </template>
-
-      <!-- 👉 Actions -->
-      <template #item.actions>
-        <MoreBtn
-          color="default"
-          :menu-list="[{ title: 'Details', value: 'Details' }, { title: 'Archive', value: 'Archive' }]"
+      <!-- Yorum sütunu editable -->
+      <template #item.comment="{ item }">
+        <VTextField
+          v-model="item.comment"
+          variant="outlined"
+          placeholder="Add Comment"
+          dense
         />
       </template>
 
       <template #bottom>
         <VDivider />
-
         <div class="d-flex align-center justify-center justify-sm-space-between flex-wrap gap-3 pa-5 pt-3">
           <p class="text-sm text-disabled mb-0">
-            {{ paginationMeta(options, projects.length) }}
+            Showing {{ options.page * options.itemsPerPage }} of {{ projects.length }} entries
           </p>
-
           <VPagination
             v-model="options.page"
             :total-visible="Math.ceil(projects.length / options.itemsPerPage)"
             :length="Math.ceil(projects.length / options.itemsPerPage)"
-          >
-            <template #next="slotProps">
-              <VBtn
-                v-bind="slotProps"
-                :icon="false"
-                variant="tonal"
-                color="default"
-              >
-                Next
-              </VBtn>
-            </template>
-
-            <template #prev="slotProps">
-              <VBtn
-                v-bind="slotProps"
-                :icon="false"
-                variant="tonal"
-                color="default"
-              >
-                Previous
-              </VBtn>
-            </template>
-          </VPagination>
+          />
         </div>
       </template>
     </VDataTable>
-    <!-- !SECTION -->
   </VCard>
 </template>
 

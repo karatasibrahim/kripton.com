@@ -1,124 +1,92 @@
 <script setup>
-import bootstrapLogo from '@images/icons/brands/bootstrap-logo.png'
-import figmaLogo from '@images/icons/brands/figma-logo.png'
-import laravelLogo from '@images/icons/brands/laravel-logo.png'
-import reactLogo from '@images/icons/brands/react-logo.png'
-import sketchLogo from '@images/icons/brands/sketch-logo.png'
-import vuejsLogo from '@images/icons/brands/vuejs-logo.png'
+import { ref } from 'vue'
+import { VContainer, VRow, VCol, VCard, VCardTitle, VCardText } from 'vuetify/components'
 
-const activeProjects = [
+// Kategoriler ve Projeler
+const categories = [
   {
-    avatarImg: laravelLogo,
-    title: 'Laravel',
-    subtitle: 'Ecommerce',
-    stats: '65',
-    progressColor: 'error',
+    title: "Layer 0",
+    description: "Farklı blockchain ağlarının bir arada çalışabilmesini sağlayan altyapı katmanıdır.",
+    projects: ["Polkadot (DOT)", "Cosmos (ATOM)", "ARPA (ARPA)"],
   },
   {
-    avatarImg: figmaLogo,
-    title: 'Figma',
-    subtitle: 'App UI Kit',
-    stats: '86',
-    progressColor: 'primary',
+    title: "Layer 1",
+    description: "Bağımsız çalışan temel blockchain ağlarıdır.",
+    projects: ["Bitcoin (BTC)", "Ethereum (ETH)", "Solana (SOL)", "TRON (TRX)"],
   },
   {
-    avatarImg: vuejsLogo,
-    title: 'VueJs',
-    subtitle: 'Calendar App',
-    stats: '90',
-    progressColor: 'success',
+    title: "Layer 2",
+    description: "Daha hızlı işlem kapasitesi ve ölçeklenebilirlik sağlayan çözümler.",
+    projects: ["Arbitrum (ARB)", "Optimism (OP)", "Polygon (MATIC)"],
   },
   {
-    avatarImg: reactLogo,
-    title: 'React',
-    subtitle: 'Dashboard',
-    stats: '37',
-    progressColor: 'info',
+    title: "Smart Contract Platform",
+    description: "Akıllı sözleşmelerle çalışan blockchain platformları.",
+    projects: ["Ethereum (ETH)", "Avalanche (AVAX)", "TRON (TRX)"],
   },
   {
-    avatarImg: bootstrapLogo,
-    title: 'Bootstrap',
-    subtitle: 'Website',
-    stats: '22',
-    progressColor: 'primary',
+    title: "DeFi",
+    description: "Merkeziyetsiz finans hizmetleri sunan projeler.",
+    projects: ["Uniswap (UNI)", "Sushiswap (SUSHI)", "Maker (MKR)"],
   },
   {
-    avatarImg: sketchLogo,
-    title: 'Sketch',
-    subtitle: 'Website Design',
-    stats: '29',
-    progressColor: 'warning',
-  },
-]
-
-const moreList = [
-  {
-    title: 'Refresh',
-    value: 'Refresh',
+    title: "Payments",
+    description: "Ödeme sistemlerini destekleyen blockchain projeleri.",
+    projects: ["Bitcoin (BTC)", "XRP (XRP)", "Stellar (XLM)"],
   },
   {
-    title: 'Download',
-    value: 'Download',
+    title: "Meme Coin",
+    description: "Topluluk odaklı eğlenceli projeler.",
+    projects: ["Dogecoin (DOGE)", "Shiba Inu (SHIB)", "PEPE (PEPE)"],
   },
   {
-    title: 'View All',
-    value: 'View All',
+    title: "NFTs",
+    description: "NFT'lerle çalışan blockchain projeleri.",
+    projects: ["Ethereum (ETH)", "Solana (SOL)", "Flow (FLOW)"],
   },
 ]
 </script>
 
 <template>
-  <VCard
-    title="Active Projects"
-    subtitle="Average 72% completed"
-  >
-    <template #append>
-      <div class="mt-n4 me-n2">
-        <MoreBtn :menu-list="moreList" />
-      </div>
-    </template>
-
-    <VCardText>
-      <VList class="card-list">
-        <VListItem
-          v-for="project in activeProjects"
-          :key="project.title"
-        >
-          <template #prepend>
-            <VAvatar
-              size="34"
-              rounded
-            >
-              <VImg :src="project.avatarImg" />
-            </VAvatar>
-          </template>
-
-          <VListItemTitle class="font-weight-medium">
-            {{ project.title }}
-          </VListItemTitle>
-          <VListItemSubtitle class="text-disabled">
-            {{ project.subtitle }}
-          </VListItemSubtitle>
-
-          <template #append>
-            <div class="d-flex align-center">
-              <div
-                class="me-2"
-                style="inline-size: 4.875rem;"
-              >
-                <VProgressLinear
-                  :model-value="project.stats"
-                  :color="project.progressColor"
-                  height="8"
-                  rounded-bar
-                  rounded
-                />
-              </div>
-              <span class="text-disabled">{{ project.stats }}%</span>
-            </div>
-          </template>
-        </VListItem>
-      </VList>
-    </VCardText>
-  </VCard>
+  <VContainer>
+    <h1 class="page-title">Kripto Kategorileri</h1>
+    <VRow>
+      <VCol
+        v-for="category in categories"
+        :key="category.title"
+        cols="12" md="6" lg="4"
+      >
+        <VCard outlined>
+          <VCardTitle class="category-title">{{ category.title }}</VCardTitle>
+          <VCardText>
+            <p class="category-description">{{ category.description }}</p>
+            <ul>
+              <li v-for="project in category.projects" :key="project">
+                {{ project }}
+              </li>
+            </ul>
+          </VCardText>
+        </VCard>
+      </VCol>
+    </VRow>
+  </VContainer>
 </template>
+
+<style scoped>
+.page-title {
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.category-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.category-description {
+  margin-bottom: 1rem;
+  font-size: 16px;
+}
+</style>

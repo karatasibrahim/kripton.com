@@ -14,9 +14,11 @@ import DefineOptions from 'unplugin-vue-define-options/vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/dist/',
   plugins: [
     vue(),
     vueJsx(),
+    
 
     // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
     vuetify({
@@ -26,7 +28,7 @@ export default defineConfig({
     }),
     Pages({
       dirs: ['./src/pages'],
-
+     
       // ℹ️ We need three routes using single routes so we will ignore generating route for this SFC file
       onRoutesGenerated: routes => [
         // Email filter

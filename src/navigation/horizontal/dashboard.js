@@ -6,15 +6,15 @@ export default [
    
     children: [
       {
-        title: 'Analytics',
+        title: 'Analiz',
         to: 'dashboards-analytics',
       },
       {
-        title: 'eCommerce',
+        title: 'Yatırım',
         to: 'dashboards-ecommerce',
       },
       {
-        title: 'CRM',
+        title: 'Kategori',
         to: 'dashboards-crm',
       },
     ],
