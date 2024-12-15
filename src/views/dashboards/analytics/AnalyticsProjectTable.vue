@@ -8,7 +8,7 @@ const searchQuery = ref('')
 
 const options = ref({
   page: 1,
-  itemsPerPage: 25, 
+  itemsPerPage: 20, 
   sortBy: [{ key: 'name', order: 'asc' }],
   groupBy: [],
   search: undefined,
@@ -39,15 +39,30 @@ async function fetchCryptoPrices() {
   ]
   const apiUrl = `https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=${symbols.join(',')}`
   
+  // try {
+  //   const response = await axios.get(apiUrl, {
+  //     headers: {
+  //       'X-CMC_PRO_API_KEY': apiKey,
+  //       Accept: 'application/json',
+  //     },
+  //   })
   try {
-    const response = await axios.get(apiUrl, {
-      headers: {
-        'X-CMC_PRO_API_KEY': apiKey,
-        Accept: 'application/json',
-      },
-    })
+    const response = await fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'X-CMC_PRO_API_KEY': apiKey,
+            'Accept': 'application/json',
+        },
+    });
 
-    const data = response.data.data
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data2 = await response.json(); 
+ 
+
+    const data = data2.data
 
     projects.value = Object.values(data).map(coin => ({
       icon: `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`, // İkon URL
@@ -59,6 +74,8 @@ async function fetchCryptoPrices() {
       lastUpdate: new Date(coin.last_updated).toLocaleString(),
       comment: '',
     })) .sort((a, b) => a.name.localeCompare(b.name))
+
+    //console.log(projects.value)
   } catch (error) {
     console.error('API Fetch Error:', error)
   }
@@ -77,7 +94,7 @@ onMounted(fetchCryptoPrices)
     <!-- Tablo -->
     <VDataTable
       v-model:page="options.page"
-      :items-per-page="10"
+      :items-per-page="20"
       show-select
       :search="searchQuery"
       :headers="headers"
@@ -87,11 +104,8 @@ onMounted(fetchCryptoPrices)
     >
       <!-- İkon sütunu -->
       <template #item.icon="{ item }">
-        <VAvatar
-          :src="item.icon"
-          size="38"
-          alt="Icon"
-        />
+        <img :src="item.value.icon" alt="Icon" width="38" height="38" />
+        
       </template>
 
       <!-- Yorum sütunu editable -->
@@ -99,7 +113,7 @@ onMounted(fetchCryptoPrices)
         <VTextField
           v-model="item.comment"
           variant="outlined"
-          placeholder="Add Comment"
+          placeholder=""
           dense
         />
       </template>
