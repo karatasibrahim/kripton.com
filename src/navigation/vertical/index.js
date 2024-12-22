@@ -6,9 +6,9 @@
 // import settings from './settings'
 // import charts from './charts'
  import dashboard from './dashboard'
-// import forms from './forms'
+ import crypto from './crypto'
 // import others from './others'
 // import uiElements from './ui-elements'
  
 
-export default [...dashboard]
+export default [...dashboard, ...crypto]

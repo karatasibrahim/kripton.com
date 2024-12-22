@@ -16,7 +16,7 @@ export default [
       {
         title: 'Kategori',
         to: 'dashboards-crm',
-      },
+      }
     ], 
     badgeClass: 'bg-primary',
   },
